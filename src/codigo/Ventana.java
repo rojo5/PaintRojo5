@@ -5,19 +5,67 @@
  */
 package codigo;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author rojo5
  */
 public class Ventana extends javax.swing.JFrame {
-
+    
+    //Declaracion de variables y objetos
+    
+    BufferedImage buffer = null;
+    BufferedImage buffer2 = null;
+    
+    Graphics2D buffersGraphics, buffers2Graphics,  lienzoGraphics = null;
+    
     /**
      * Creates new form Ventana
      */
     public Ventana() {
         initComponents();
+        iniciaBuffers();
     }
-
+    //Inicializamos los buffers para poder crear un lienzo donde poder pintar
+    private void iniciaBuffers(){
+        lienzoGraphics = (Graphics2D)  lienzo.getGraphics();
+        //Creo una imagen del mismo tamaño que el lienzo
+        buffer = (BufferedImage) lienzo.createImage(lienzo.getWidth(), lienzo.getHeight());
+        //HAcemos que la imagen sea modificable
+        buffersGraphics = buffer.createGraphics();
+        //Pintamos un rectagunlo blanco que hara de fondo en el Paint
+        buffersGraphics.setColor(Color.white);
+        buffersGraphics.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
+        
+        //Creamos un segundo buffer para poder guardar los cambios mientras se modifica el
+        //el primer buffer
+         lienzoGraphics = (Graphics2D)  lienzo.getGraphics();
+        //Creo una imagen del mismo tamaño que el lienzo
+        buffer2 = (BufferedImage) lienzo.createImage(lienzo.getWidth(), lienzo.getHeight());
+        //HAcemos que la imagen sea modificable
+        buffers2Graphics = buffer2.createGraphics();
+        //Pintamos un rectagunlo blanco que hara de fondo en el Paint
+        buffers2Graphics.setColor(Color.white);
+        buffers2Graphics.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
+    }
+    
+    
+    
+    //Sobreescribimos el metedo de java "paint" para adaptarlo a nuestras necesidades
+    @Override
+    public void paint(Graphics g){
+        super.paint(g);
+        Graphics2D g2 = (Graphics2D) buffer.getGraphics();
+        
+        //Apuntamos al lienzo
+        g2 = (Graphics2D) lienzo.getGraphics();
+        g2.drawImage(buffer, 0, 0, null);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
