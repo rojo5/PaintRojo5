@@ -30,6 +30,8 @@ public class Ventana extends javax.swing.JFrame {
     Color colorSeleccionado = Color.RED;
     
     Forma miForma;
+    //Linea
+    Linea miLinea;
     
     int numLados;
     
@@ -101,6 +103,7 @@ public class Ventana extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -241,6 +244,15 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        jButton11.setText("LINEA");
+        jButton11.setToolTipText("");
+        jButton11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton11MousePressed(evt);
+            }
+        });
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Guardar");
@@ -267,7 +279,8 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lienzo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -288,7 +301,9 @@ public class Ventana extends javax.swing.JFrame {
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 113, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 42, Short.MAX_VALUE))
         );
 
         pack();
@@ -297,6 +312,9 @@ public class Ventana extends javax.swing.JFrame {
     private void lienzoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lienzoMousePressed
        //Dependiendo del boton que hayamos cogido cogera una forma de pintar
         switch(numLados){
+            //Prueba
+            case 2: miLinea = new Linea(evt.getX(), evt.getY(), colorSeleccionado);break;
+                    
             case 3: miForma = new Triangulo(evt.getX(), evt.getY(),colorSeleccionado, true);break;   
             case 4: miForma = new Cuadrado(evt.getX(), evt.getY(),colorSeleccionado, true);break;   
             case 5: miForma = new Pentagono(evt.getX(), evt.getY(),colorSeleccionado, true);break;
@@ -311,12 +329,28 @@ public class Ventana extends javax.swing.JFrame {
     private void lienzoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lienzoMouseDragged
         //Borro lo que hubiera en el lienzo
         buffersGraphics.drawImage(buffer2, 0, 0,null);
-        miForma.dibujate(buffersGraphics, evt.getX(), evt.getY()); //"evt.getX()" sirve para rotar y "evt.getY()" sirve para cambiar el tamaño
+        
+        if(numLados ==2){
+          miLinea.pintaLinea(buffersGraphics,evt.getX(), evt.getY());
+        }
+        else{
+            miForma.dibujate(buffersGraphics, evt.getX(), evt.getY()); //"evt.getX()" sirve para rotar y "evt.getY()" sirve para cambiar el tamaño
+        }
+        
+        //miForma.dibujate(buffersGraphics, evt.getX(), evt.getY()); //"evt.getX()" sirve para rotar y "evt.getY()" sirve para cambiar el tamaño
         lienzoGraphics.drawImage(buffer, 0, 0, null);
     }//GEN-LAST:event_lienzoMouseDragged
 
     private void lienzoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lienzoMouseReleased
-        miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY());
+        
+        if(numLados ==2){
+          miLinea.pintaLinea(buffers2Graphics,evt.getX(), evt.getY());
+        }
+        else{
+           miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY()); 
+        }
+        
+        //miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY());
     }//GEN-LAST:event_lienzoMouseReleased
 
     private void jButton2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MousePressed
@@ -385,6 +419,11 @@ public class Ventana extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jButton11MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton11MousePressed
+        //Linea
+        numLados=2;
+    }//GEN-LAST:event_jButton11MousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -425,6 +464,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JDialog guardarImagen;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
