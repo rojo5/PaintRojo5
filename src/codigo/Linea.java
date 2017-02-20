@@ -10,7 +10,7 @@ import java.awt.Graphics;
 
 /**
  *
- * @author Usuario
+ * @author Rojo5
  */
 public class Linea {
     int x1, x2, y1, y2;

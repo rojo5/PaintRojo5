@@ -9,7 +9,7 @@ import java.awt.Color;
 
 /**
  *
- * @author Usuario
+ * @author Rojo5
  */
 public class Pentagono extends Forma{
     
