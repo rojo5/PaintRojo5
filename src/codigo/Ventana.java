@@ -34,6 +34,8 @@ public class Ventana extends javax.swing.JFrame {
     Linea miLinea;
     //Pincel
     Pincel miPincel;
+    //Goma
+    Goma miGoma;
     
     int numLados;
     
@@ -107,6 +109,7 @@ public class Ventana extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -265,6 +268,14 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        jButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/goma.png"))); // NOI18N
+        jButton12.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jButton12MousePressed(evt);
+            }
+        });
+
         jMenu1.setText("File");
 
         jMenuItem1.setText("Guardar");
@@ -296,7 +307,9 @@ public class Ventana extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lienzo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -322,6 +335,8 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -332,13 +347,13 @@ public class Ventana extends javax.swing.JFrame {
        //Dependiendo del boton que hayamos cogido cogera una forma de pintar
         switch(numLados){
             //Prueba
-            case 1: miPincel= new Pincel(evt.getX(), evt.getY(), 50, colorSeleccionado);break; //5 es el radio
-            
+            case 1: miPincel= new Pincel(evt.getX(), evt.getY(), 15, colorSeleccionado);break; //15 es el radio
             case 2: miLinea = new Linea(evt.getX(), evt.getY(), colorSeleccionado);break;                    
             case 3: miForma = new Triangulo(evt.getX(), evt.getY(),colorSeleccionado, true);break;   
             case 4: miForma = new Cuadrado(evt.getX(), evt.getY(),colorSeleccionado, true);break;   
             case 5: miForma = new Pentagono(evt.getX(), evt.getY(),colorSeleccionado, true);break;
             case 6: miForma = new Hexagono(evt.getX(), evt.getY(),colorSeleccionado, true);break;
+            case 8: miGoma = new Goma(evt.getX(), evt.getY(), 15, Color.WHITE);break; //15 es el radio
             case 24: miForma = new Estrella(evt.getX(), evt.getY(),colorSeleccionado, true);break;
             case 100: miForma = new Circulo(evt.getX(), evt.getY(),colorSeleccionado, true);break;   
         }
@@ -350,16 +365,15 @@ public class Ventana extends javax.swing.JFrame {
         //Borro lo que hubiera en el lienzo
         buffersGraphics.drawImage(buffer2, 0, 0,null);
         //Divido el Dragged en 2 para diferenciar miLinea de miForma y no se pinten los dos metodos
-        if(numLados ==2){
-            //pasamos la posicion del raton
-          miLinea.pintaLinea(buffersGraphics,evt.getX(), evt.getY());
+        
+        switch(numLados){
+            case 1:miPincel.pinta(buffers2Graphics,evt.getX(), evt.getY()); break;
+            case 2:miLinea.pintaLinea(buffersGraphics,evt.getX(), evt.getY()); break;
+            case 8:miGoma.pinta(buffers2Graphics,evt.getX(), evt.getY()); break;
+            default: miForma.dibujate(buffersGraphics, evt.getX(), evt.getY()); break; //"evt.getX()" sirve para rotar y "evt.getY()" sirve para cambiar el tamaño
         }
-        else if(numLados == 1){
-            miPincel.pinta(buffers2Graphics,evt.getX(), evt.getY());
-        }
-        else{
-            miForma.dibujate(buffersGraphics, evt.getX(), evt.getY()); //"evt.getX()" sirve para rotar y "evt.getY()" sirve para cambiar el tamaño
-        }
+        
+
         
        
         lienzoGraphics.drawImage(buffer, 0, 0, null);
@@ -368,15 +382,15 @@ public class Ventana extends javax.swing.JFrame {
 
     private void lienzoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lienzoMouseReleased
         //Divido el Release en 2 para diferenciar miLinea de miForma y no se pinten los dos metodos
-        if(numLados ==2){
-          miLinea.pintaLinea(buffers2Graphics,evt.getX(), evt.getY());
+        
+        switch(numLados){
+            case 1:miPincel.pinta(buffers2Graphics,evt.getX(), evt.getY()); break;
+            case 2: miLinea.pintaLinea(buffers2Graphics,evt.getX(), evt.getY()); break;
+            case 8: miGoma.pinta(buffers2Graphics,evt.getX(), evt.getY()); break;
+            default:miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY()); break;
         }
-        else if (numLados==1){
-           miPincel.pinta(buffers2Graphics,evt.getX(), evt.getY());
-        }
-        else{
-             miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY()); 
-        }
+        
+
         
         //miForma.dibujate(buffers2Graphics, evt.getX(), evt.getY());
     }//GEN-LAST:event_lienzoMouseReleased
@@ -457,6 +471,11 @@ public class Ventana extends javax.swing.JFrame {
        numLados=1;
     }//GEN-LAST:event_jButton5MousePressed
 
+    private void jButton12MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton12MousePressed
+        //goma
+        numLados= 8;
+    }//GEN-LAST:event_jButton12MousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -498,6 +517,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
