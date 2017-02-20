@@ -24,8 +24,10 @@ public class Linea {
     
     public  void pintaLinea(Graphics g, int posX, int posY){
         
-        
+        this.x2= posX;
+        this.y2 =posY;
         
         g.drawLine(x1, y1, x2, y2);
     }
+    
 }

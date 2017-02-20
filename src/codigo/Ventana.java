@@ -244,7 +244,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        jButton11.setText("LINEA");
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/line_48.png"))); // NOI18N
         jButton11.setToolTipText("");
         jButton11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButton11.addMouseListener(new java.awt.event.MouseAdapter() {
